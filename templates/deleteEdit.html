@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<!--<form action="/new/add_news" method="POST">
+
+    <input type="text" name="title" placeholder="title">
+    <input type="text" name="subtitle" placeholder="subtitle">
+    <input type="text" name="article" placeholder="article">
+    <input type="text" name="autor" placeholder="autor">
+
+    <button>
+        Save
+    </button>
+
+</form>-->
+<title> Edición de publicaciones </title>
+<header class="masthead" style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 75%, #000000 100%),url('../static/assets/img/bg-masthead.jpg')">
+<div style="color:white">
+<h2> {{nameType}} </h2>
+<table>
+  <thead>
+    <tr>
+        <td> id </td>
+        <td> titulo </td>
+        <td> subtitulo  </td>
+        <td> autor </td>
+        <td> operaciones </id>
+    </tr>
+  </thead>
+  <tbody>
+  {% for i in data %}
+     <tr>
+        <td> {{i.0}} </td>
+        <td> {{i.1}} </td>
+        <td> {{i.2}}  </td>
+        <td> {{i.4}} </td>
+        <td>
+          <a href="/edit/{{nameType}}/{{i.0}}"> Editar </a>
+          <a href="/delete/{{nameType}}/{{i.0}}"> Eliminar</a>
+        </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+</header>
+<section class="about-section text-center" id="about">
+  <div class="container">
+      <img class="img-fluid" src="{{ url_for('static', filename='assets/img/ipad.png')}}" alt="" />
+  </div>
+</section>
+  {% endblock %}

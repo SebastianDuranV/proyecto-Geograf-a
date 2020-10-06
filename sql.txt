@@ -1,0 +1,37 @@
+CREATE DATABASE projectGeo;
+
+USE projectGeo
+
+CREATE TABLE news ( idNews INT PRIMARY KEY AUTO_INCREMENT, titleNews VARCHAR(100) NOT NULL, subtitleNews VARCHAR(200) NOT NULL, 
+                    articleNews MEDIUMTEXT NOT NULL , dateTimeNews DATETIME NOT NULL, dateTimeNews_update DATETIME NOT NULL,imagenNews VARCHAR(100) NOT NULL 
+                    ,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor) NOT NULL , archiveTrueNews BOOL DEFAULT 0 
+                    ,FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory) NOT NULL );
+
+
+CREATE TABLE blog ( idBlog INT PRIMARY KEY AUTO_INCREMENT, titleBlog VARCHAR(100) NOT NULL , subtitleBlog VARCHAR(200) NOT NULL , 
+                    articleBlog MEDIUMTEXT NOT NULL , dateTimeBlog DATETIME, dateTimeBlog_update DATETIME,  imagenBlog VARCHAR(100) NOT NULL 
+                    ,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor) NOT NULL, archiveTrueBlog BOOL DEFAULT 0
+                    ,FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory));
+
+
+CREATE TABLE projects ( idProject INT PRIMARY KEY AUTO_INCREMENT, titleProject VARCHAR(100) NOT NULL, subtitleProject VARCHAR(200) NOT NULL, 
+                     articleProject MEDIUMTEXT NOT NULL , dateTimeProject DATETIME, dateTimeProject_update DATETIME,  imagenProject VARCHAR(100) NOT NULL 
+                     ,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor) NOT NULL, archiveTrueProject BOOL DEFAULT 0
+                     ,FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory));
+
+
+CREATE TABLE maps ( idMap INT PRIMARY KEY AUTO_INCREMENT, titleMap VARCHAR(100) NOT NULL, subtitleMap VARCHAR(200) NOT NULL, 
+                     dateTimeMap DATETIME, dateTimeMap_update DATETIME,  imagenMap VARCHAR(100) NOT NULL  
+                     ,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor) NOT NULL, archiveTrueMap BOOL NOT NULL
+                     ,FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory), nameArchiveMap VARCHAR(40) NOT NULL);
+
+
+CREATE TABLE monitoring ( idMonitoring INT PRIMARY KEY AUTO_INCREMENT, titleMonitoring VARCHAR(100) NOT NULL, subtitleMonitoring VARCHAR(200) NOT NULL, 
+                     articleMonitoring MEDIUMTEXT NOT NULL , dateTimeMonitoring DATETIME, dateTimeMonitoring_update DATETIME,  imagenMonitoring VARCHAR(100) NOT NULL  
+                     ,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor) NOT NULL, archiveTrueMonitoring BOOL NOT NULL
+                     ,FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory), nameArchiveMoritoring VARCHAR(40) NOT NULL );
+
+CREATE TABLE category (idFilecategory INT PRIMARY KEY AUTO_INCREMENT, nameCategory VARCHAR(15));
+
+CREATE TABLE author (idAuthor INT PRIMARY KEY AUTO_INCREMENT, names VARCHAR(25) , lastnames VARCHAR(25), gradeAcademy VARCHAR(20), descripttion VARCHAR(200)
+                    , contact VARCHAR (30));

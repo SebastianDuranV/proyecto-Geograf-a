@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<!--<form action="/new/add_news" method="POST">
+
+    <input type="text" name="title" placeholder="title">
+    <input type="text" name="subtitle" placeholder="subtitle">
+    <input type="text" name="article" placeholder="article">
+    <input type="text" name="autor" placeholder="autor">
+
+    <button>
+        Save
+    </button>
+
+</form>-->
+<title> New news </title>
+<header class="masthead" style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 75%, #000000 100%),url('../static/assets/img/bg-masthead.jpg')">
+<form name="New news" action="/new/add_{{type}}" enctype="multipart/form-data" method="POST" id="contactForm" style="padding-top: -3vmin" novalidate>
+  <div class="container">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <p style="color: red">{{message}}</p>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <h2 class="text-white" >Añadir nueva {{type}}</h2>
+    <div class="control-group">
+      <div class="form-group floating-label-form-group controls">
+        <label style="color:white" >Title</label>
+        <input type="text" class="form-control" name="title" placeholder="title" id="title" required data-validation-required-message="Please enter your title.">
+        <p class="help-block text-danger"></p>
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="form-group floating-label-form-group controls">
+        <label style="color:white" >Subtitle</label>
+        <input type="text" class="form-control" name="subtitle" placeholder="subtitle" id="subtitle" required data-validation-required-message="Please enter your subtitle.">
+        <p class="help-block text-danger"></p>
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="form-group col-xs-12 floating-label-form-group controls">
+        <label style="color:white" >Autor</label>
+        <select class="form-control" placeholder="autor" id="autor" name="autor">
+          {%for i in authores%}
+          <option value="{{i.0}}">{{i.1}} {{i.2}}</option>
+          {%endfor%} 
+       </select>
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="form-group col-xs-12 floating-label-form-group controls">
+        <label style="color:white" >Categoría</label>
+        <select class="form-control" placeholder="catergory" id="catergory" name="catergory">
+          {%for i in category%}
+          <option value="{{i.0}}">{{i.1}} </option>
+          {%endfor%} 
+       </select>
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="form-group col-xs-12 floating-label-form-group controls">
+        <label style="color:white" >Imagen URL</label>
+        <input type="text" class="form-control" name="Imagen-url" placeholder="Imagen url" id="Imagen-url" required data-validation-required-message="Please enter Imagen url.">
+        <p class="help-block text-danger"></p>
+      </div>
+    </div>
+    <!-- 736 x 400 video e imagen -->
+    <div class="control-group">
+      <div class="form-group floating-label-form-group controls">
+        {%if type != "map" %}
+        <label style="color:white" >Article in HTML</label>
+        <textarea type="text" rows="5" class="form-control" name="article" placeholder="Article" id="article" required data-validation-required-message="Please enter a message."></textarea>
+        <p class="help-block text-danger"></p>
+        {% else %}
+        <label style="color:white" >Dirección en directorio del mapa (en html) </label>
+        <textarea type="text" rows="5" class="form-control" name="article" placeholder="Dirección" id="article" required data-validation-required-message="Please enter a message."></textarea>
+        <p class="help-block text-danger"></p>
+        {%endif%}
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label style="color:white"> Subir archivos en zip  </label>
+      <input type="file" class="btn btn-secondary" name="files" accept =".zip">
+    </div>
+    <br>
+    <div id="success"></div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" id="sendMessageButton">Save</button>
+    </div>
+
+
+  </div>
+  </form>
+</header>
+<section class="about-section text-center" id="about">
+  <div class="container">
+      <img class="img-fluid" src="{{ url_for('static', filename='assets/img/ipad.png')}}" alt="" />
+  </div>
+</section>
+  {% endblock %}

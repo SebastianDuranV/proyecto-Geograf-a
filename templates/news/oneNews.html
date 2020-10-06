@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{% for data in date %}
+<header class="masthead" style="background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.5) 75%, #000000 100%),url({{data.6}});
+        background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading" style="padding-top: 30px;">
+            <h1 style="color:white">{{data.1}} </h2>
+            
+            <h2 class="subheading" style="color:white">{{data.2}}</h2>
+            
+            <span class="meta" style="color:white">Posted by
+              <a href="#">---</a>
+              on {{data.4}} · <span class="reading-time" title="Estimated read time">
+   4 mins  read </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+<div class="container" style="padding-top:4vmin">
+    <div class="row">
+      <div class="col-md-8">
+        {{data.3 | safe}}
+        <hr>
+        <div class="clearfix">
+          <a class="btn btn-primary float-left" href="/startbootstrap-clean-blog-jekyll/2020/01/31/heartbeats.html" data-toggle="tooltip" data-placement="top" title="" data-original-title="I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.">← Previous<span class="d-none d-md-inline">
+              Post</span></a>
+        </div>
+      </div>
+      <div class="col-md-4">
+  <!-- Categories Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Categories</h5>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <ul class="list-unstyled mb-0">
+                  <li>
+                    <a href="#">Web Design</a>
+                  </li>
+                  <li>
+                    <a href="#">HTML</a>
+                  </li>
+                  <li>
+                    <a href="#">Freebies</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-lg-6">
+                <ul class="list-unstyled mb-0">
+                  <li>
+                    <a href="#">JavaScript</a>
+                  </li>
+                  <li>
+                    <a href="#">CSS</a>
+                  </li>
+                  <li>
+                    <a href="#">Tutorials</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Side Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Side Widget</h5>
+          <div class="card-body">
+            You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
+          </div>
+        </div>
+
+</div>
+    </div>
+</div>
+
+
+
+<div style="padding-top:10vmin"></div>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<title> Edición de publicaciones </title>
+<header class="masthead" style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 75%, #000000 100%),url('../static/assets/img/bg-masthead.jpg')">
+<div style="color:white">
+<h2> Autores </h2>
+<table>
+  <thead>
+    <tr>
+        <td> Id </td>
+        <td> Nombre </td>
+        <td> Apellidos  </td>
+        <td> Contacto </id>
+    </tr>
+  </thead>
+  <tbody>
+  {% for i in data %}
+     <tr>
+        <td> {{i.0}} </td>
+        <td> {{i.1}} </td>
+        <td> {{i.2}}  </td>
+        <td> {{i.5}} </td>
+        <td>
+          <a href="/edit/author/{{i.0}}"> Editar </a>
+          <a href="/delete/author/{{i.0}}"> Eliminar</a>
+        </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+</header>
+<section class="about-section text-center" id="about">
+  <div class="container">
+      <img class="img-fluid" src="{{ url_for('static', filename='assets/img/ipad.png')}}" alt="" />
+  </div>
+
+
+{% endblock %}

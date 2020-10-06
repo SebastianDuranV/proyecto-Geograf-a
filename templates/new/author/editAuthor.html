@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<title> Editar autores </title>
+<header class="masthead" style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 75%, #000000 100%),url('../static/assets/img/bg-masthead.jpg')">
+<form name="New news" action="/update/add_author/{{data.0}}" enctype="multipart/form-data" method="POST" id="contactForm" style="padding-top: -3vmin" novalidate>
+  <div class="container">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <p style="color: red">{{message}}</p>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <h2 class="text-white" >Editar autor </h2>
+    <div class="control-group">
+      <div class="form-group floating-label-form-group controls">
+        <label style="color:white" >Nombres </label>
+        <input type="text" value= "{{data.0.1}}" class="form-control" name="names" placeholder="nombre" id="names" required data-validation-required-message="Please enter your title.">
+        <p class="help-block text-danger"></p>
+      </div>
+      <div class="form-group floating-label-form-group controls">
+        <label style="color:white" >Apellidos</label>
+        <input type="text" value= "{{data.0.2}}" class="form-control" name="lastnames" placeholder="Apellidos" id="lastnames" required data-validation-required-message="Please enter your title.">
+        <p class="help-block text-danger"></p>
+      </div>
+      <div class="form-group floating-label-form-group controls">
+        <label style="color:white" >Grado académico</label>
+        <input type="text" value= "{{data.0.3}}" class="form-control" name="gradeAcademy" placeholder="Grado académico" id="gradeAcademy" required data-validation-required-message="Please enter your title.">
+        <p class="help-block text-danger"></p>
+      </div>
+      <div class="form-group floating-label-form-group controls">
+        <label style="color:white" >Descripción</label> <!-- editar contctos en email-telefono -->
+        <input type="text" value= "{{data.0.4}}" class="form-control" name="descripttion" placeholder="Descripción" id="descripttion" required data-validation-required-message="Please enter your title.">
+        <p class="help-block text-danger"></p>
+      </div>
+      <div class="form-group floating-label-form-group controls">
+        <label style="color:white" >Contacto</label> <!-- editar contctos en email-telefono -->
+        <input type="text" value= "{{data.0.5}}" class="form-control" name="contact" placeholder="Contacto" id="contact" required data-validation-required-message="Please enter your title.">
+        <p class="help-block text-danger"></p>
+      </div>
+    </div>
+    <div class="control-group">
+      <label style="color:white"> Subir foto  </label>
+      <input type="file" class="btn btn-secondary" name="photo" accept =".jpg .png" >
+    </div>
+    <br>
+    <div id="success"></div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" id="sendMessageButton">Save</button>
+    </div>
+
+
+  </div>
+  </form>
+</header>
+<section class="about-section text-center" id="about">
+  <div class="container">
+      <img class="img-fluid" src="{{ url_for('static', filename='assets/img/ipad.png')}}" alt="" />
+  </div>
+</section>
+{% endblock %}
