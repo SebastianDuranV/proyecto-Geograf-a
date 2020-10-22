@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <title>{{type}}</title>
-<div style="background-color:black; min-height: 12vmin;" ></div>
+<div style="background-color:black; min-height: 11.75vmin;" ></div>
 
  <!-- Page Content -->
  <div class="container" >
@@ -11,28 +11,28 @@
       <!-- Blog Entries Column -->
       <div class="col-md-8">
 
-        <h1 class="my-4">Lista de {{type}}
+        <h1 class="my-4">{{type}}
           <small>Secondary Text</small>
         </h1>
          {% for news in manyNews %}
          <div class="card mb-4">
-            <img class="card-img-top" width="100%"  height="300vmin" src="{{news.6}}" alt="Card image cap">
+            <img class="card-img-top"  src="{{news.6}}" alt="Card image cap">
             <div class="card-body">
               <h2 class="card-title">{{ news.1 }}</h2>
               <p class="card-text">{{ news.2 }}</p>
-              {%if type == "mapas"%}
-              <a href="./static/uploaders/mapas/{{news.0}}/{{news.3}}" class="btn btn-primary"> Ver mapa &rarr;</a>
+              {%if type == "map"%}
+              <a href="../../static/uploaders/map/{{news.0}}/{{news.3}}" class="btn btn-primary"> Ver mapa &rarr;</a>
               {%else%}
                 <a href="/{{type}}/{{ news.0 }}" class="btn btn-primary"> Ver &rarr;</a>
               {%endif%}
             </div>
             <div class="card-footer text-muted">
               Posted on {{ news.4 }} by
-              <a href="#">{{ news.10 }} {{news.11}}</a>
+              <a href="#">{{news.9}} {{ news.10 }} {{news.11}}</a>
             </div>
           </div>
         {% endfor %}
-
+        
         <!-- Pagination -->
         <ul class="pagination justify-content-center mb-4">
           <li class="page-item">
@@ -48,18 +48,20 @@
       <!-- Sidebar Widgets Column -->
       <div class="col-md-4">
 
-        <!-- Search Widget -->
+        <!-- Buscar Widget -->
+        <form name="New news" action="/search" enctype="multipart/form-data" method="POST" id="contactForm" style="padding-top: -3vmin" novalidate>
         <div class="card my-4">
-          <h5 class="card-header">Search</h5>
+          <h5 class="card-header">Buscador interno</h5>
           <div class="card-body">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search for...">
+              <input type="text" id="search" name="search" class="form-control" placeholder="Buscar ...">
               <span class="input-group-append">
-                <button class="btn btn-secondary" type="button">Go!</button>
+                <button class="btn btn-secondary" type="submit">Buscar</button>
               </span>
             </div>
           </div>
         </div>
+        </form>
 
         <!-- Categories Widget -->
         <div class="card my-4">

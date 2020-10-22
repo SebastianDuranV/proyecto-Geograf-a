@@ -13,7 +13,7 @@ app.config['MYSQL_USER'] = 'sebastianDuran'
 app.config['MYSQL_PASSWORD'] = 'proyecto'
 app.config['MYSQL_DB'] = 'sebastianDuran$default'
 
-
+password = 'password'
 
 mysql.init_app(app)
 
@@ -33,43 +33,57 @@ def extractallZip(directory, namefile):
 def index():
     return render_template('index.html')
 
-@app.route('/administrador')
-def adminLogin():
-    return render_template('Admin.html')
-
-@app.route('/administrador/lista',methods = ['POST'])
-def admnin():
-    if request.method == 'POST':
-        cur = mysql.connection.cursor()
-        cur.execute('select contraseña from administrador;')
-        password = cur.fetchall()
-        entry = request.form['password']
-        if entry == password[0][0]:
-            return redirect(url_for('listContend'))
-        else:
-            flash("Contraseña incorrecta")
-            return redirect(url_for('adminLogin'))
-
-
-@app.route('/administrador',methods = ['GET'], defaults={'post_id': None})
-@app.route('/administrador/lista',methods = ['GET'])
-def listContend():
-    return render_template('new/author/newAuthor.html')
-
-
 #####   A   U   T   O   R   ######
 
-@app.route('/new/author')
+@app.route('/new/author',methods = ['POST','GET'])
 def newAuthor():
-    return render_template('new/author/newAuthor.html')
+    correct = False
+    if request.method == 'POST':
+        try:
+            entry = request.form['password']
+        except:
+            flash("Contraseña incorrecta")
+            return render_template('Admin.html',action = 'new', type='author')
+        if entry == password:
+            correct = True
+            return render_template('new/author/newAuthor.html')
+        flash("Contraseña incorrecta")
+        return render_template('Admin.html',action = 'new', type='author')
+    else:
+        if correct:
+            return render_template('new/author/newAuthor.html')
+        else:
+            return render_template('Admin.html',action = 'new', type='author')
 
 
-@app.route('/list/author')
+
+@app.route('/list/author', methods = ['POST','GET'])
 def listAuthor():
-    cur = mysql.connection.cursor()
-    cur.execute('select * from author;')
-    authors = cur.fetchall()
-    return render_template('new/author/deleteEditAuthor.html', data = authors)
+    correct = False
+    if request.method == 'POST':
+        try:
+            entry = request.form['password']
+        except:
+            flash("Contraseña incorrecta")
+            return render_template('Admin.html',action = 'list', type='author')
+        if entry == password:
+            correct = True
+            cur = mysql.connection.cursor()
+            cur.execute('select * from author;')
+            authors = cur.fetchall()
+            return render_template('new/author/deleteEditAuthor.html', data = authors)
+        else:
+            flash("Contraseña incorrecta")
+            return render_template('Admin.html',action = 'list', type='author')
+    else:
+        if correct:
+            cur = mysql.connection.cursor()
+            cur.execute('select * from author;')
+            authors = cur.fetchall()
+            return render_template('new/author/deleteEditAuthor.html', data = authors)
+        else:
+            return render_template('Admin.html',action = 'list', type='author')
+
 
 
 @app.route('/edit/author/<idAuthor>')
@@ -388,6 +402,37 @@ def update(types,idA):
         mysql.connection.commit()
         cur.close()
         return redirect(url_for("deleteEdit" , nameTypes = types))
+
+
+
+#### Buscador
+@app.route('/search',methods = ['POST','GET'])
+def search():
+    if request.method == 'POST':
+        searchWords = request.form['search']
+        search = searchWords.split()
+        cur = mysql.connection.cursor()
+        types =["noticias","blog","mapas","proyectos","monitoreos"]
+        listFile = []
+        for k in types:
+            cur.execute("select * from " + k + " LEFT JOIN author ON " + k + ".idAuthor = author.idAuthor;")
+            listType = cur.fetchall()
+            listType = list(listType)
+            for i in listType:
+                exist = True
+                j = 0
+                while j < len(search) and exist:
+                    if not search[j] in (i[1] + " " + i[2] + " " + i[3]):
+                        exist = False
+                    j += 1
+                if exist :
+                    f = []
+                    for p in i:
+                        f.append(p)
+                    f.append(k)
+                    listFile.append(f)
+    return render_template("search.html", manyNews = listFile , type = (),  category=())
+
 
 
 #@app.route('/tablas', methods = ['POST','GET'])

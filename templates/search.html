@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block content %}
+<title>Resultado de Busqueda</title>
+<div style="background-color:black; min-height: 12vmin;" ></div>
+
+ <!-- Page Content -->
+ <div class="container" >
+
+    <div class="row">
+
+      <!-- Blog Entries Column -->
+      <div class="col-md-8">
+
+        <h1 class="my-4">Resultado de Busqueda</h1>
+         {% for news in manyNews %}
+         <div class="card mb-4">
+            <img class="card-img-top" width="100%"  height="300vmin" src="{{news.6}}" alt="Card image cap">
+            <div class="card-body">
+              <h2 class="card-title">{{ news.1 }}</h2>
+              <p class="card-text">{{ news.2 }}</p>
+              {%if type == "mapas"%}
+              <a href="../../static/uploaders/map/{{news.0}}/{{news.3}}" class="btn btn-primary"> Ver mapa &rarr;</a>
+              {%else%}
+                <a href="/{{news.16}}/{{ news.0 }}" class="btn btn-primary"> Ver &rarr;</a>
+              {%endif%}
+            </div>
+            <div class="card-footer text-muted">
+              Posted on {{ news.4 }} by
+              <a href="#">{{ news.10 }} {{news.11}}</a>
+            </div>
+          </div>
+        {% endfor %}
+        
+        <!-- Pagination -->
+        <ul class="pagination justify-content-center mb-4">
+          <li class="page-item">
+            <a class="page-link" href="#">&larr; Older</a>
+          </li>
+          <li class="page-item disabled">
+            <a class="page-link" href="#">Newer &rarr;</a>
+          </li>
+        </ul>
+
+      </div>
+
+      <!-- Sidebar Widgets Column -->
+      <div class="col-md-4">
+
+        <!-- Buscar Widget -->
+        <form name="New news" action="/search" enctype="multipart/form-data" method="POST" id="contactForm" style="padding-top: -3vmin" novalidate>
+        <div class="card my-4">
+          <h5 class="card-header">Buscador interno</h5>
+          <div class="card-body">
+            <div class="input-group">
+              <input type="text" id="search" name="search" class="form-control" placeholder="Buscar ...">
+              <span class="input-group-append">
+                <button class="btn btn-secondary" type="submit">Buscar</button>
+              </span>
+            </div>
+          </div>
+        </div>
+        </form>
+
+        <!-- Side Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Side Widget</h5>
+          <div class="card-body">
+            You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+
+
+{% endblock %}
