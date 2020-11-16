@@ -20,8 +20,8 @@
             <div class="card-body">
               <h2 class="card-title">{{ news.1 }}</h2>
               <p class="card-text">{{ news.2 }}</p>
-              {%if type == "map"%}
-              <a href="../../static/uploaders/map/{{news.0}}/{{news.3}}" class="btn btn-primary"> Ver mapa &rarr;</a>
+              {%if type == "mapas"%}
+              <a href="./static/uploaders/mapas/{{news.0}}/{{news.3}}" class="btn btn-primary"> Ver mapa &rarr;</a>
               {%else%}
                 <a href="/{{type}}/{{ news.0 }}" class="btn btn-primary"> Ver &rarr;</a>
               {%endif%}
@@ -32,7 +32,7 @@
             </div>
           </div>
         {% endfor %}
-        
+
         <!-- Pagination -->
         <ul class="pagination justify-content-center mb-4">
           <li class="page-item">
