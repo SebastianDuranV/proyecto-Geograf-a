@@ -8,10 +8,16 @@ app = Flask(__name__)
 # Set the secret key to some random bytes. Keep this really secret!
 app.secret_key = 'el perro se llama manjar'
 mysql = MySQL()
-app.config['MYSQL_HOST'] = 'sebastianDuran.mysql.pythonanywhere-services.com'
-app.config['MYSQL_USER'] = 'sebastianDuran'
-app.config['MYSQL_PASSWORD'] = 'proyecto'
-app.config['MYSQL_DB'] = 'sebastianDuran$default'
+#app.config['MYSQL_HOST'] = 'sebastianDuran.mysql.pythonanywhere-services.com'
+#app.config['MYSQL_USER'] = 'sebastianDuran'
+#app.config['MYSQL_PASSWORD'] = 'proyecto'
+#app.config['MYSQL_DB'] = 'sebastianDuran$default'
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'password'
+app.config['MYSQL_DB'] = 'proyectoGeografia'
+
 
 password = 'password'
 
@@ -196,7 +202,7 @@ def getListOfType(types):
     cur = mysql.connect.cursor()
     try:
         cur.execute('SELECT ' + types + '.*, author.names, author.lastNames FROM ' + types
-                    + ' LEFT JOIN author  ON ' + types + '.idAuthor = author.idAuthor;')
+                    + ' LEFT JOIN author  ON ' + types + '.idAuthor = author.idAuthor ORDER BY dateTime' + types + '_update DESC; ')
     except:
         return '<h2> NOT FOUND 404 <h2>'
     data = cur.fetchall()
@@ -213,11 +219,25 @@ def getListOfType(types):
 @app.route('/<types>/<idType>')
 def getOneType(types,idType):
     cur = mysql.connect.cursor()
-    cur.execute('SELECT * FROM '+ types +' WHERE id'+ types.capitalize() +' =' + idType)
+    cur.execute('SELECT * FROM '+ types +' WHERE id'+ types.capitalize() +'=' + idType + ';')
     data = cur.fetchall()
-    cur.close()
+    cur.execute('SELECT id'+ types +' FROM '+ types)
+    otherData = cur.fetchall()
     if data:
-        return render_template('news/oneNews.html', date = data, type = types, id = idType)
+        i = 0
+        while str(otherData[i][0]) != idType and i<len(otherData):
+            i += 1
+        other = []
+        if i == 0 :
+            other.append(" ")
+        else:
+            other.append(otherData[i-1])
+        try:
+            other.append(otherData[i+1])
+        except:
+            other.append(" ")
+        return render_template('news/oneNews.html', date = data, type = types, id = idType, otherData=other)
+        
     else:
         return "<h2>NOT FOUND</h2>"
 
@@ -257,6 +277,7 @@ def addRegisterType(types):
             idCategory = request.form.get('category')
         except:
             print("no categoria")
+
         if request.form['Imagen-url']:
             imagen = request.form['Imagen-url']
         else:
@@ -264,7 +285,7 @@ def addRegisterType(types):
 
         try:
             cur = mysql.connection.cursor()
-            cur.execute('INSERT INTO '+ types +' VALUES(NULL,%s,%s,%s,NOW(),NOW(),%s,%s,%s)',(title, subtitle,article,imagen, idAutor,idCategory))
+            cur.execute('INSERT INTO '+ types +' VALUES(NULL,%s,%s,%s,NOW(),NOW(),%s,%s,%s,NULL)',(title, subtitle,article,imagen, idAutor,idCategory))
         except:
             return"no insertado "
 
@@ -435,49 +456,5 @@ def search():
 
 
 
-#@app.route('/tablas', methods = ['POST','GET'])
-def crearTablas():
-    cur = mysql.connect.cursor()
-
-    #author
-    cur.execute('CREATE TABLE author (idAuthor INT  AUTO_INCREMENT , PRIMARY KEY (idAuthor), names VARCHAR(40) , lastnames VARCHAR(40), gradeAcademy VARCHAR(60), descripttion VARCHAR(200), contact VARCHAR (40)), photo BOOL DEFAULT 0;')
-
-    #categories
-    cur.execute('CREATE TABLE category (idFilecategory INT  AUTO_INCREMENT , PRIMARY KEY (idFilecategory), nameCategory VARCHAR(25));')
-
-    # noticias
-    cur.execute('CREATE TABLE noticias ( idnoticias INT  AUTO_INCREMENT , PRIMARY KEY (idnoticias), titlenoticias VARCHAR(180) , subtitlenoticias VARCHAR(200) , '
-                       +'articlenoticias MEDIUMTEXT , dateTimenoticias DATETIME , dateTimenoticias_update DATETIME ,imagennoticias VARCHAR(180)  '
-                        +',idAuthor int, FOREIGN KEY (idAuthor) REFERENCES author(idAuthor)  , archiveTruenoticias BOOL DEFAULT 0 '
-                      +',idFilecategory int, FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory)  );')
-
-    # blog
-    cur.execute('CREATE TABLE blog ( idBlog INT  AUTO_INCREMENT , PRIMARY KEY (idBlog), titleBlog VARCHAR(180)  , subtitleBlog VARCHAR(200)  , '
-                        +'articleBlog MEDIUMTEXT  , dateTimeBlog DATETIME, dateTimeBlog_update DATETIME,  imagenBlog VARCHAR(180)  '
-                        +',idAuthor int, FOREIGN KEY (idAuthor) REFERENCES author(idAuthor) , archiveTrueBlog BOOL DEFAULT 0'
-                       +',idFilecategory int, FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory));')
-
-    #proyectos
-    cur.execute('CREATE TABLE proyectos ( idproyectos INT  AUTO_INCREMENT , PRIMARY KEY (idproyectos), titleproyectos VARCHAR(180) , subtitleproyectos VARCHAR(200) , '
-                        +'articleproyectos MEDIUMTEXT  , dateTimeproyectos DATETIME, dateTimeproyectos_update DATETIME,  imagenproyectos VARCHAR(180)  '
-                       +',idAuthor int, FOREIGN KEY (idAuthor) REFERENCES author(idAuthor) , archiveTrueproyectos BOOL DEFAULT 0'
-                        +',idFilecategory int, FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory));')
-
-    #mapass
-    cur.execute('CREATE TABLE mapas ( idmapas INT  AUTO_INCREMENT , PRIMARY KEY (idmapas), titlemapas VARCHAR(200) , subtitlemapas VARCHAR(200) , '
-                         +'filemapas VARCHAR(200)  , dateTimemapas DATETIME, dateTimemapas_update DATETIME,  imagenmapas VARCHAR(200)  '
-                        +',idAuthor int, FOREIGN KEY (idAuthor) REFERENCES author(idAuthor) , archiveTruemapas BOOL DEFAULT 0'
-                        +',idFilecategory int, FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory));')
-
-    #monitoreos
-    cur.execute('CREATE TABLE monitoreos ( idmonitoreos INT  AUTO_INCREMENT , PRIMARY KEY (idmonitoreos), titlemonitoreos VARCHAR(180) , subtitlemonitoreos VARCHAR(200) , '
-                         +'articlemonitoreos MEDIUMTEXT  , dateTimemonitoreos DATETIME, dateTimemonitoreos_update DATETIME,  imagenmonitoreos  VARCHAR(180)  '
-                        +',idAuthor int, FOREIGN KEY (idAuthor) REFERENCES author(idAuthor) , archiveTruemonitoreos BOOL DEFAULT 0'
-                        +',idFilecategory int, FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory));')
-
-
-
-
-    cur.close()
-    return "listo"
-
+if __name__=='__main__':
+    app.run(port = 2000, debug=True)
