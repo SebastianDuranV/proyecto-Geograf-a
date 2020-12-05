@@ -1,37 +1,32 @@
-CREATE DATABASE projectGeo;
+CREATE DATABASE proyectoGeografia;
 
-USE projectGeo
+USE proyectoGeografia;
 
-CREATE TABLE news ( idNews INT PRIMARY KEY AUTO_INCREMENT, titleNews VARCHAR(100) NOT NULL, subtitleNews VARCHAR(200) NOT NULL, 
-                    articleNews MEDIUMTEXT NOT NULL , dateTimeNews DATETIME NOT NULL, dateTimeNews_update DATETIME NOT NULL,imagenNews VARCHAR(100) NOT NULL 
-                    ,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor) NOT NULL , archiveTrueNews BOOL DEFAULT 0 
-                    ,FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory) NOT NULL );
+CREATE TABLE noticias ( idnoticias INT PRIMARY KEY AUTO_INCREMENT, titlenoticias VARCHAR(100), subtitlenoticias VARCHAR(200), articlenoticias MEDIUMTEXT , dateTimenoticias DATETIME, dateTimenoticias_update DATETIME,imagennoticias VARCHAR(100) ,idAuthor int,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor));
 
 
-CREATE TABLE blog ( idBlog INT PRIMARY KEY AUTO_INCREMENT, titleBlog VARCHAR(100) NOT NULL , subtitleBlog VARCHAR(200) NOT NULL , 
-                    articleBlog MEDIUMTEXT NOT NULL , dateTimeBlog DATETIME, dateTimeBlog_update DATETIME,  imagenBlog VARCHAR(100) NOT NULL 
-                    ,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor) NOT NULL, archiveTrueBlog BOOL DEFAULT 0
-                    ,FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory));
+CREATE TABLE blog ( idBlog INT PRIMARY KEY AUTO_INCREMENT, titleBlog VARCHAR(100) , subtitleBlog VARCHAR(200) , 
+                    articleBlog MEDIUMTEXT , dateTimeBlog DATETIME, dateTimeBlog_update DATETIME,  imagenBlog VARCHAR(100) 
+                    ,idAuthor int,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor), FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory));
 
 
-CREATE TABLE projects ( idProject INT PRIMARY KEY AUTO_INCREMENT, titleProject VARCHAR(100) NOT NULL, subtitleProject VARCHAR(200) NOT NULL, 
-                     articleProject MEDIUMTEXT NOT NULL , dateTimeProject DATETIME, dateTimeProject_update DATETIME,  imagenProject VARCHAR(100) NOT NULL 
-                     ,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor) NOT NULL, archiveTrueProject BOOL DEFAULT 0
-                     ,FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory));
+CREATE TABLE proyectos ( idproyectos INT PRIMARY KEY AUTO_INCREMENT, titleproyectos VARCHAR(100), subtitleproyectos VARCHAR(200), 
+                     articleproyectos MEDIUMTEXT , dateTimeproyectos DATETIME, dateTimeproyectos_update DATETIME,  imagenproyectos VARCHAR(100) 
+                     ,idAuthor int,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor));
 
 
-CREATE TABLE maps ( idMap INT PRIMARY KEY AUTO_INCREMENT, titleMap VARCHAR(100) NOT NULL, subtitleMap VARCHAR(200) NOT NULL, 
-                     dateTimeMap DATETIME, dateTimeMap_update DATETIME,  imagenMap VARCHAR(100) NOT NULL  
-                     ,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor) NOT NULL, archiveTrueMap BOOL NOT NULL
-                     ,FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory), nameArchiveMap VARCHAR(40) NOT NULL);
+CREATE TABLE mapas ( idmapas INT PRIMARY KEY AUTO_INCREMENT, titlemapas VARCHAR(100), subtitlemapas VARCHAR(200), 
+                     dateTimemapas DATETIME, dateTimemapas_update DATETIME,  imagenmapas VARCHAR(100)  
+                     ,idAuthor int,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor));
 
 
-CREATE TABLE monitoring ( idMonitoring INT PRIMARY KEY AUTO_INCREMENT, titleMonitoring VARCHAR(100) NOT NULL, subtitleMonitoring VARCHAR(200) NOT NULL, 
-                     articleMonitoring MEDIUMTEXT NOT NULL , dateTimeMonitoring DATETIME, dateTimeMonitoring_update DATETIME,  imagenMonitoring VARCHAR(100) NOT NULL  
-                     ,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor) NOT NULL, archiveTrueMonitoring BOOL NOT NULL
-                     ,FOREIGN KEY (idFilecategory) REFERENCES category(idFilecategory), nameArchiveMoritoring VARCHAR(40) NOT NULL );
+CREATE TABLE monitoreo ( idmonitoreo INT PRIMARY KEY AUTO_INCREMENT, titlemonitoreo VARCHAR(100), subtitlemonitoreo VARCHAR(200), 
+                     articlemonitoreo MEDIUMTEXT , dateTimemonitoreo DATETIME, dateTimemonitoreo_update DATETIME,  imagenmonitoreo VARCHAR(100)  
+                     ,idAuthor int,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor));
 
 CREATE TABLE category (idFilecategory INT PRIMARY KEY AUTO_INCREMENT, nameCategory VARCHAR(15));
 
-CREATE TABLE author (idAuthor INT PRIMARY KEY AUTO_INCREMENT, names VARCHAR(25) , lastnames VARCHAR(25), gradeAcademy VARCHAR(20), descripttion VARCHAR(200)
+CREATE TABLE author (idAuthor INT PRIMARY KEY AUTO_INCREMENT, names VARCHAR(40) , lastnames VARCHAR(40), gradeAcademy VARCHAR(80), descripttion VARCHAR(200)
                     , contact VARCHAR (30));
+
+CREATE TABLE ip(ipName VARCHAR(15), date DATETIME);

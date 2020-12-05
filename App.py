@@ -47,7 +47,7 @@ def loadingLogin():
         if entry == password:
             correct = True
             cur = mysql.connection.cursor()
-            cur.execute('INSERT INTO id (idName) values(%s);', [request.remote_addr])
+            cur.execute('INSERT INTO ip (ipName) values(%s);', [request.remote_addr])
             mysql.connection.commit()
             cur.close()
             return render_template('option.html')
@@ -61,7 +61,7 @@ def loadingLogin():
 
 def comprobation():
     cur = mysql.connection.cursor()
-    cur.execute('select idName from id;')
+    cur.execute('select ipName from ip;')
     ips = cur.fetchall()
     cur.close()
     ips = (str(ips))
@@ -169,16 +169,15 @@ def addAuthor():
         descripttion = request.form['descripttion']
         contact = request.form['contact']
 
-        if request.files['photo']:
-            photo = 1 # 1 : hay foto
-                      # 0 : no hay foto
-        else:
-            photo = 0
+        cur = mysql.connection.cursor()
+        cur.execute('INSERT INTO author (names,lastnames, gradeAcademy, descripttion,contact)'
+                       +' VALUES(%s,%s,%s,%s,%s)',(names, lastname, gradeAcademy,descripttion,contact))
+        mysql.connection.commit()
 
         try:
             cur = mysql.connection.cursor()
-            cur.execute('INSERT INTO author (names,lastnames, gradeAcademy, descripttion,contact,photo)'
-                        +' VALUES(%s,%s,%s,%s,%s,%s)',(names, lastname, gradeAcademy,descripttion,contact,photo))
+            cur.execute('INSERT INTO author (names,lastnames, gradeAcademy, descripttion,contact)'
+                        +' VALUES(%s,%s,%s,%s,%s)',(names, lastname, gradeAcademy,descripttion,contact))
             mysql.connection.commit()
         except:
             flash("El autor no fue añadido exitosamente, asegurese de que ingresó todos los datos.")
@@ -292,7 +291,10 @@ def addRegisterType(types):
 
         try:
             cur = mysql.connection.cursor()
-            cur.execute('INSERT INTO '+ types +' VALUES(NULL,%s,%s,%s,NOW(),NOW(),%s,%s,%s,NULL)',(title, subtitle,article,imagen, idAutor,idCategory))
+            if types == "blog":
+                cur.execute('INSERT INTO '+ types +' VALUES(NULL,%s,%s,%s,NOW(),NOW(),%s,%s,%s)',(title, subtitle,article,imagen, idAutor,idCategory))
+            else:
+                cur.execute('INSERT INTO '+ types +' VALUES(NULL,%s,%s,%s,NOW(),NOW(),%s,%s)',(title, subtitle,article,imagen, idAutor))
         except:
             return"no insertado "
 
@@ -398,8 +400,11 @@ def update(types,idA):
         try:
             if types != "mapas":
                 cur.execute('update '+ types + ' set title'+ types +' = %s,subtitle'+ types + ' = %s,article'
-                            + types +' = %s, idAuthor = %s , dateTime'+ types +', dateTime'+ types +'_update = NOW(), idFilecategory = %s, imagen'+ types +' = %s'
-                            ,(title, subtitle,article, idAutor,idCategory,imagen))
+                            + types +' = %s, idAuthor = %s , dateTime'+ types +'_update = NOW(), imagen'+ types +' = %s'
+                            ,(title, subtitle,article, idAutor,imagen))
+            elif types == "blog":
+                cur.execute('update blog set titleblog = %s,subtitleblog = %s,articleblog = %s, idAuthor = %s , dateTimeblog_update = NOW(), imagenblog = %s, idFilecategory = %s'
+                            ,(title, subtitle,article, idAutor,imagen,idCategory))
             else:
                 cur.execute('update mapas set titlemapas = %s , subtitlemapas = %s, filemapas = %s'
                         + ', idAuthor = %s , dateTimemapas_update = NOW(),idFilecategory = %s, imagenmapas = %s'
