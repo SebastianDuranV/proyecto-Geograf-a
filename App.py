@@ -8,15 +8,15 @@ app = Flask(__name__)
 # Set the secret key to some random bytes. Keep this really secret!
 app.secret_key = 'el perro se llama manjar'
 mysql = MySQL()
-app.config['MYSQL_HOST'] = 'sebastianDuran.mysql.pythonanywhere-services.com'
-app.config['MYSQL_USER'] = 'sebastianDuran'
-app.config['MYSQL_PASSWORD'] = 'proyecto'
-app.config['MYSQL_DB'] = 'sebastianDuran$default'
+#app.config['MYSQL_HOST'] = 'sebastianDuran.mysql.pythonanywhere-services.com'
+#app.config['MYSQL_USER'] = 'sebastianDuran'
+#app.config['MYSQL_PASSWORD'] = 'proyecto'
+#app.config['MYSQL_DB'] = 'sebastianDuran$default'
 
-#app.config['MYSQL_HOST'] = 'localhost'
-#app.config['MYSQL_USER'] = 'root'
-#app.config['MYSQL_PASSWORD'] = 'password'
-#app.config['MYSQL_DB'] = 'proyectoGeografia'
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'password'
+app.config['MYSQL_DB'] = 'proyectoGeografia'
 
 
 password = 'password'
@@ -31,7 +31,41 @@ def extractallZip(directory, namefile):
     fantasy_zip.close()
     os.remove(directory + '/' + namefile)
 
+@app.route('/login')
+def login():
+    return render_template('Admin.html')
 
+@app.route('/loading',methods = ['POST','GET'])
+def loadingLogin():
+     correct = False
+     if request.method == 'POST':
+        try:
+            entry = request.form['password']
+        except:
+            flash("Contraseña incorrecta")
+            return redirect(url_for("login"))
+        if entry == password:
+            correct = True
+            cur = mysql.connection.cursor()
+            cur.execute('INSERT INTO id (idName) values(%s);', [request.remote_addr])
+            mysql.connection.commit()
+            cur.close()
+            return render_template('option.html')
+        flash("Contraseña incorrecta")
+        return redirect(url_for("login"))
+     else:
+        if correct:
+            return render_template('option.html')
+        else:
+            return redirect(url_for("login"))
+
+def comprobation():
+    cur = mysql.connection.cursor()
+    cur.execute('select idName from id;')
+    ips = cur.fetchall()
+    cur.close()
+    ips = (str(ips))
+    return request.remote_addr in ips
 
 ##   i   n   d   e   x -----
 
@@ -43,71 +77,43 @@ def index():
 
 @app.route('/new/author',methods = ['POST','GET'])
 def newAuthor():
-    correct = False
-    if request.method == 'POST':
-        try:
-            entry = request.form['password']
-        except:
-            flash("Contraseña incorrecta")
-            return render_template('Admin.html',action = 'new', type='author')
-        if entry == password:
-            correct = True
-            return render_template('new/author/newAuthor.html')
-        flash("Contraseña incorrecta")
-        return render_template('Admin.html',action = 'new', type='author')
-    else:
-        if correct:
-            return render_template('new/author/newAuthor.html')
-        else:
-            return render_template('Admin.html',action = 'new', type='author')
+    if comprobation():
+        return render_template('new/author/newAuthor.html')
+    return redirect(url_for("login"))
 
 
 
 @app.route('/list/author', methods = ['POST','GET'])
 def listAuthor():
-    correct = False
-    if request.method == 'POST':
-        try:
-            entry = request.form['password']
-        except:
-            flash("Contraseña incorrecta")
-            return render_template('Admin.html',action = 'list', type='author')
-        if entry == password:
-            correct = True
-            cur = mysql.connection.cursor()
-            cur.execute('select * from author;')
-            authors = cur.fetchall()
-            return render_template('new/author/deleteEditAuthor.html', data = authors)
-        else:
-            flash("Contraseña incorrecta")
-            return render_template('Admin.html',action = 'list', type='author')
-    else:
-        if correct:
-            cur = mysql.connection.cursor()
-            cur.execute('select * from author;')
-            authors = cur.fetchall()
-            return render_template('new/author/deleteEditAuthor.html', data = authors)
-        else:
-            return render_template('Admin.html',action = 'list', type='author')
+    if comprobation():
+        correct = True
+        cur = mysql.connection.cursor()
+        cur.execute('select * from author;')
+        authors = cur.fetchall()
+        return render_template('new/author/deleteEditAuthor.html', data = authors)
+    return redirect(url_for("login"))
 
 
 
 @app.route('/edit/author/<idAuthor>')
 def editAuthor(idAuthor):
-    cur = mysql.connection.cursor()
-    cur.execute('select * from author where idAuthor = ' +idAuthor)
-    author = cur.fetchall()
-    print(author)
-    return render_template('new/author/editAuthor.html', data = author)
+    if comprobation():
+        cur = mysql.connection.cursor()
+        cur.execute('select * from author where idAuthor = ' +idAuthor)
+        author = cur.fetchall()
+        return render_template('new/author/editAuthor.html', data = author)
+    return redirect(url_for("login"))
 
 
 @app.route('/delete/author/<idAuthor>')
 def deleteAuthor(idAuthor):
-    cur = mysql.connection.cursor()
-    cur.execute('delete from author where idAuthor = ' + idAuthor)
-    mysql.connection.commit()
-    cur.close()
-    return redirect(url_for("listAuthor"))
+    if comprobation():
+        cur = mysql.connection.cursor()
+        cur.execute('delete from author where idAuthor = ' + idAuthor)
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for("listAuthor"))
+    return redirect(url_for("login"))
 
 
 
@@ -244,24 +250,25 @@ def getOneType(types,idType):
 
 @app.route('/new/<nameType>')
 def newRegisterType(nameType):
-    cur = mysql.connect.cursor()
-    try:
-        cur.execute('select * from '+ nameType + ' limit 1;')
-    except:
-        return '<h2> NOT FOUND 404 : name type not found  <h2>'
+    if comprobation():
+        cur = mysql.connect.cursor()
+        try:
+            cur.execute('select * from '+ nameType + ' limit 1;')
+        except:
+            return '<h2> NOT FOUND 404 : name type not found  <h2>'
 
-    # extraer autores
-    cur.execute('select  idAuthor, names, lastnames from author')
-    authores = cur.fetchall()
-    cur.execute('select  idFilecategory, nameCategory from category')
-    category = cur.fetchall()
-    cur.close()
-    #num_fields = len(cur.description)
-    field_names = [i[0] for i in cur.description]
-    #print(field_names)
-    return render_template('new/newNews.html', type = nameType
-            ,description = field_names, authores=authores, category=category)
-
+        # extraer autores
+        cur.execute('select  idAuthor, names, lastnames from author')
+        authores = cur.fetchall()
+        cur.execute('select  idFilecategory, nameCategory from category')
+        category = cur.fetchall()
+        cur.close()
+        #num_fields = len(cur.description)
+        field_names = [i[0] for i in cur.description]
+        #print(field_names)
+        return render_template('new/newNews.html', type = nameType
+                ,description = field_names, authores=authores, category=category)
+    return redirect(url_for("login"))
 
 @app.route('/new/add_<types>', methods = ['POST'])
 def addRegisterType(types):
@@ -327,50 +334,54 @@ def addRegisterType(types):
 
 @app.route('/deleteEdit/<nameTypes>')
 def deleteEdit(nameTypes):
-    try:
-        cur = mysql.connection.cursor()
-        cur.execute('select * from '+ nameTypes)
-        data = cur.fetchall()
-    except:
-        return '<h2> NOT FOUND 404 : name type not found  <h2>'
-    return render_template('deleteEdit.html', nameType = nameTypes, data=data)
+    if comprobation():
+        try:
+            cur = mysql.connection.cursor()
+            cur.execute('select * from '+ nameTypes)
+            data = cur.fetchall()
+        except:
+            return '<h2> NOT FOUND 404 : name type not found  <h2>'
+        return render_template('deleteEdit.html', nameType = nameTypes, data=data)
+    return redirect(url_for("login"))
 
 @app.route('/delete/<nameType>/<id>')
 def delete(nameType,id):
-    cur = mysql.connection.cursor()
-    cur.execute('delete from '+ nameType +' where id'+ nameType +' = ' + str(id))
-    directory = "./static/uploaders/" + nameType +'/' + str(id)
-    #os.rmdir(directory)
-    try:
-        os.chmod (directory, 777)
-        os.remove(directory)
-    except:
-        print("no archivo")
-    mysql.connection.commit()
-    cur.close()
-    return redirect(url_for("deleteEdit" , nameTypes = nameType))
-
+    if comprobation():
+        cur = mysql.connection.cursor()
+        cur.execute('delete from '+ nameType +' where id'+ nameType +' = ' + str(id))
+        directory = "./static/uploaders/" + nameType +'/' + str(id)
+        #os.rmdir(directory)
+        try:
+            os.chmod (directory, 777)
+            os.remove(directory)
+        except:
+            print("no archivo")
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for("deleteEdit" , nameTypes = nameType))
+    return redirect(url_for("login"))
 
 @app.route('/edit/<nameType>/<id>')
 def edit(nameType,id):
-    cur = mysql.connection.cursor()
-    cur.execute('select * from '+ nameType +' where id'+ nameType +' = ' + str(id))
-    data = cur.fetchall()
-    #print(data[0])
-    cur.close()
-    # return render_template('edit.html', type = nameType, data=data[0])
-    cur = mysql.connection.cursor()
-    cur.execute('select  idAuthor, names, lastnames from author')
-    authores = cur.fetchall()
-    cur.execute('select  idFilecategory, nameCategory from category')
-    category = cur.fetchall()
-    cur.close()
-    #num_fields = len(cur.description)
-    field_names = [i[0] for i in cur.description]
-    #print(field_names)
-    return render_template('edit.html', type = nameType , data=data[0]
-            ,description = field_names, authores=authores, category=category)
-
+    if comprobation():
+        cur = mysql.connection.cursor()
+        cur.execute('select * from '+ nameType +' where id'+ nameType +' = ' + str(id))
+        data = cur.fetchall()
+        #print(data[0])
+        cur.close()
+        # return render_template('edit.html', type = nameType, data=data[0])
+        cur = mysql.connection.cursor()
+        cur.execute('select  idAuthor, names, lastnames from author')
+        authores = cur.fetchall()
+        cur.execute('select  idFilecategory, nameCategory from category')
+        category = cur.fetchall()
+        cur.close()
+        #num_fields = len(cur.description)
+        field_names = [i[0] for i in cur.description]
+        #print(field_names)
+        return render_template('edit.html', type = nameType , data=data[0]
+                ,description = field_names, authores=authores, category=category)
+    return redirect(url_for("login"))
 
 @app.route('/update/<types>/<idA>',methods = ['POST'])
 def update(types,idA):
@@ -456,5 +467,5 @@ def search():
 
 
 
-#if __name__=='__main__':
-#    app.run(port = 2000, debug=True)
+if __name__=='__main__':
+    app.run(port = 2000, debug=True)

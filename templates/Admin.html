@@ -3,7 +3,7 @@
 
 <title> Administrador </title>
 <header class="masthead" style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 75%, #000000 100%),url('../static/assets/img/bg-masthead.jpg')">
-<form name="New news" action="{{type}}" enctype="multipart/form-data" method="POST" id="contactForm" style="padding-top: -3vmin" novalidate>
+<form name="New news" action="/loading" enctype="multipart/form-data" method="POST" id="contactForm" style="padding-top: -3vmin" novalidate>
   <div class="container">
     {% with messages = get_flashed_messages() %}
     {% if messages %}

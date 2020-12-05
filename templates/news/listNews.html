@@ -3,6 +3,7 @@
 <title>{{type}}</title>
 <div style="background-color:black; min-height: 11.75vmin;" ></div>
 
+
  <!-- Page Content -->
  <div class="container" >
 
@@ -16,7 +17,9 @@
         </h1>
          {% for news in manyNews %}
          <div class="card mb-4">
-            <img class="card-img-top"  src="{{news.6}}" alt="Card image cap">
+           <div class= "imagen">
+            <img class="crop" width="100%"  height="300vmin" src="{{news.6}}" alt="Card image cap">
+           </div>
             <div class="card-body">
               <h2 class="card-title">{{ news.1 }}</h2>
               <p class="card-text">{{ news.2 }}</p>
@@ -32,7 +35,6 @@
             </div>
           </div>
         {% endfor %}
-
         <!-- Pagination -->
         <ul class="pagination justify-content-center mb-4">
           <li class="page-item">
