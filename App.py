@@ -405,15 +405,15 @@ def update(types,idA):
         try:
             if types != "mapas":
                 cur.execute('update '+ types + ' set title'+ types +' = %s,subtitle'+ types + ' = %s,article'
-                            + types +' = %s, idAuthor = %s , dateTime'+ types +'_update = NOW(), imagen'+ types +' = %s'
-                            ,(title, subtitle,article, idAutor,imagen))
+                            + types +' = %s, idAuthor = %s , dateTime'+ types +'_update = NOW(), imagen'+ types +' = %s where id'+ types +' = %s'
+                            ,(title, subtitle,article, idAutor,imagen,idA))
             elif types == "blog":
-                cur.execute('update blog set titleblog = %s,subtitleblog = %s,articleblog = %s, idAuthor = %s , dateTimeblog_update = NOW(), imagenblog = %s, idFilecategory = %s'
-                            ,(title, subtitle,article, idAutor,imagen,idCategory))
+                cur.execute('update blog set titleblog = %s,subtitleblog = %s,articleblog = %s, idAuthor = %s , dateTimeblog_update = NOW(), imagenblog = %s, idFilecategory = %s where idblog = %s'
+                            ,(title, subtitle,article, idAutor,imagen,idCategory,idA))
             else:
                 cur.execute('update mapas set titlemapas = %s , subtitlemapas = %s, filemapas = %s'
-                        + ', idAuthor = %s , dateTimemapas_update = NOW(),idFilecategory = %s, imagenmapas = %s'
-                        ,(title, subtitle, article,idAutor,idCategory,imagen))
+                        + ', idAuthor = %s , dateTimemapas_update = NOW(),idFilecategory = %s, imagenmapas = %s where idMapas = %s'
+                        ,(title, subtitle, article,idAutor,idCategory,imagen,idA))
         except:
             return "no se ha podido actualizar." + types
 
@@ -454,7 +454,7 @@ def search():
         searchWords = request.form['search']
         search = searchWords.split()
         cur = mysql.connection.cursor()
-        types =["noticias","blog","mapas","proyectos","monitoreos"]
+        types =["noticias","blog","mapas","proyectos","monitoreo"]
         listFile = []
         for k in types:
             cur.execute("select * from " + k + " LEFT JOIN author ON " + k + ".idAuthor = author.idAuthor;")
