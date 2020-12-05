@@ -13,6 +13,11 @@ mysql = MySQL()
 #app.config['MYSQL_PASSWORD'] = 'proyecto'
 #app.config['MYSQL_DB'] = 'sebastianDuran$default'
 
+#app.config['MYSQL_HOST'] = 'iribarrenp.mysql.pythonanywhere-services.com'
+#app.config['MYSQL_USER'] = 'iribarrenp'
+#app.config['MYSQL_PASSWORD'] = 'nuevositio'
+#app.config['MYSQL_DB'] = 'iribarrenp$proyectoGeografia'
+
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'password'
