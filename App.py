@@ -229,7 +229,8 @@ def getListOfType(types):
 @app.route('/<types>/<idType>')
 def getOneType(types,idType):
     cur = mysql.connect.cursor()
-    cur.execute('SELECT * FROM '+ types +' WHERE id'+ types.capitalize() +'=' + idType + ';')
+    cur.execute('SELECT ' + types + '.*, author.names, author.lastNames FROM ' + types
+                    + ' LEFT JOIN author  ON ' + types + '.idAuthor = author.idAuthor WHERE id'+ types.capitalize() +'=' + idType + ';')
     data = cur.fetchall()
     cur.execute('SELECT id'+ types +' FROM '+ types)
     otherData = cur.fetchall()
