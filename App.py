@@ -404,17 +404,18 @@ def update(types,idA):
         #  idCategory
         types = types[1::]
         try:
-            if types != "mapas":
+            if types != "blog":
                 cur.execute('update '+ types + ' set title'+ types +' = %s,subtitle'+ types + ' = %s,article'
                             + types +' = %s, idAuthor = %s , dateTime'+ types +'_update = NOW(), imagen'+ types +' = %s where id'+ types +' = %s'
                             ,(title, subtitle,article, idAutor,imagen,idA))
-            elif types == "blog":
+            #elif types == "blog":
+            else:
                 cur.execute('update blog set titleblog = %s,subtitleblog = %s,articleblog = %s, idAuthor = %s , dateTimeblog_update = NOW(), imagenblog = %s, idFilecategory = %s where idblog = %s'
                             ,(title, subtitle,article, idAutor,imagen,idCategory,idA))
-            else:
-                cur.execute('update mapas set titlemapas = %s , subtitlemapas = %s, filemapas = %s'
-                        + ', idAuthor = %s , dateTimemapas_update = NOW(),idFilecategory = %s, imagenmapas = %s where idMapas = %s'
-                        ,(title, subtitle, article,idAutor,idCategory,imagen,idA))
+            #else:
+                #cur.execute('update mapas set titlemapas = %s , subtitlemapas = %s, filemapas = %s'
+                #        + ', idAuthor = %s , dateTimemapas_update = NOW(),idFilecategory = %s, imagenmapas = %s where idMapas = %s'
+                #        ,(title, subtitle, article,idAutor,idCategory,imagen,idA))
         except:
             return "no se ha podido actualizar." + types
 
