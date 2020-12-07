@@ -319,7 +319,7 @@ def addRegisterType(types):
             try:
                 os.makedirs(directory)
             except:
-                return "no se pudo crear archivo" + directory
+                return "no se pudo crear archivo " + directory
 
             app.config['UPLOAD_FOLDER'] = "./proyecto-Geograf-a/static/uploaders/" + types +'/'+ str(data[0][0])
             f = request.files['files']
