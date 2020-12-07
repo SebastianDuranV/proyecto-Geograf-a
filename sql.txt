@@ -15,7 +15,7 @@ CREATE TABLE proyectos ( idproyectos INT PRIMARY KEY AUTO_INCREMENT, titleproyec
                      ,idAuthor int,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor));
 
 
-CREATE TABLE mapas ( idmapas INT PRIMARY KEY AUTO_INCREMENT, titlemapas VARCHAR(100), subtitlemapas VARCHAR(200), 
+CREATE TABLE mapas ( idmapas INT PRIMARY KEY AUTO_INCREMENT, titlemapas VARCHAR(100), subtitlemapas VARCHAR(200), articlemapas MEDIUMTEXT, 
                      dateTimemapas DATETIME, dateTimemapas_update DATETIME,  imagenmapas VARCHAR(100)  
                      ,idAuthor int,FOREIGN KEY (idAuthor) REFERENCES author(idAuthor));
 
