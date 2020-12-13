@@ -31,7 +31,11 @@
             </div>
             <div class="card-footer text-muted">
               Hecho el {{ news.4 }} por
-              <a href="#">{{news.8}} {{ news.9 }}</a>
+              {%if type != "blog"%}
+              {{news.8}} {{ news.9 }}
+              {%else%}
+              {{news.8}} {{ news.9 }}
+              {%endif%}
             </div>
           </div>
         {% endfor %}
