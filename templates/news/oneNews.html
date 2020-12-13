@@ -17,7 +17,11 @@
             <h2 class="subheading" style="color:white">{{data.2}}</h2>
             
             <span class="meta" style="color:white">Escrito por
-              {{data.8}} {{ data.9 }} 
+              {%if type != "blog"%}
+              <a href="#">{{data.8}} {{ data.9 }}</a>
+              {%else%}
+              <a href="#">{{data.9}} {{ data.10 }}</a>
+              {%endif%} 
             </span>
           </div>
         </div>
