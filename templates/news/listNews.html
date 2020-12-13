@@ -13,7 +13,7 @@
       <div class="col-md-8">
 
         <h1 class="my-4">{{type}}
-          <small>Secondary Text</small>
+          <!-- <small>Secondary Text</small> -->
         </h1>
          {% for news in manyNews %}
          <div class="card mb-4">
@@ -31,7 +31,11 @@
             </div>
             <div class="card-footer text-muted">
               Hecho el {{ news.4 }} por
+              {%if type != "blog"%}
               <a href="#">{{news.8}} {{ news.9 }}</a>
+              {%else%}
+              <a href="#">{{news.9}} {{ news.10 }}</a>
+              {%endif%}
             </div>
           </div>
         {% endfor %}
