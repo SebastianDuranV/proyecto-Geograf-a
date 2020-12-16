@@ -247,6 +247,8 @@ img {
   vertical-align: middle;
   border-style: none;
   max-width: 100%;
+  display:block;
+  margin:auto;
 }
 
 svg {
